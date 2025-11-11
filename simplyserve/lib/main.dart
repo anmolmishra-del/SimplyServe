@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/image.dart';
+import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,10 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 5)); // wait 5 seconds
     if (!mounted) return;
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const HomePage()),
-    // );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const OnbordingPage()),
+    );
   }
 
   @override
