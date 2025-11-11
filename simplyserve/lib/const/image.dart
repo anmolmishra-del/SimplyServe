@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class AppImage{
 static const String logo = 'assets/images/splash.png';
 static const String onlyLogo = 'assets/images/logo.png';
@@ -13,3 +14,11 @@ static const String orderFoodIcon = 'assets/images/order_food_icon.png';
 static const String profileIcon = 'assets/images/profile_icon.png';
 static const String shopGroceriesIcon = 'assets/images/shop_groceries_icon.png';
 }
+=======
+class AppImage {
+  static const String logo = 'assets/images/splash.png';
+  static const String bucket = 'assets/images/bucket.png';
+  static const String hotel = 'assets/images/bucket.png';
+  static const String hand = 'assets/images/hand.png';
+}
+>>>>>>> OnboardPage

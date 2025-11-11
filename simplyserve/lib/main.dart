@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
+<<<<<<< HEAD
 import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
 import 'package:simplyserve/screen/landing_page/landing_page.dart';
 
 
+=======
+import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
+>>>>>>> OnboardPage
 
 void main() {
   runApp(const MyApp());
@@ -61,7 +65,11 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     Navigator.pushReplacement(
       context,
+<<<<<<< HEAD
       MaterialPageRoute(builder: (context) => const LoginLandingPage()),
+=======
+      MaterialPageRoute(builder: (context) => const OnbordingPage()),
+>>>>>>> OnboardPage
     );
   }
 
