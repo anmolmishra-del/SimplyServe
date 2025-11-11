@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
+import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
+import 'package:simplyserve/screen/landing_page/landing_page.dart';
+
+
 
 void main() {
   runApp(const MyApp());
@@ -12,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -53,16 +59,16 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 5)); // wait 5 seconds
     if (!mounted) return;
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const HomePage()),
-    // );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginLandingPage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // or your AppColors.primary
+      backgroundColor: AppColors.white, // or your AppColors.primary
       body: Center(
         child: Image.asset(
           AppImage.logo,
