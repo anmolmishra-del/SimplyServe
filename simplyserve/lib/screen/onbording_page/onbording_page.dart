@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
+import 'package:simplyserve/screen/landing_page/landing_page.dart';
 
 class OnbordingPage extends StatefulWidget {
   const OnbordingPage({super.key});
@@ -50,9 +51,7 @@ class _OnbordingPageState extends State<OnbordingPage> {
                 itemBuilder: (context, index) {
                   final page = _pages[index];
 
-                  // 👇 Custom layouts for first 2 pages and last page
                   if (index == _pages.length - 1) {
-                    // ✅ LAST PAGE (Hand Page)
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
@@ -61,7 +60,6 @@ class _OnbordingPageState extends State<OnbordingPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Top Titles
                           Column(
                             children: const [
                               Text(
@@ -86,10 +84,8 @@ class _OnbordingPageState extends State<OnbordingPage> {
                             ],
                           ),
 
-                          // Center Hand Image
                           Image.asset(page['image']!, height: 180),
 
-                          // Bottom Text + Button
                           Column(
                             children: [
                               Text(
@@ -112,13 +108,20 @@ class _OnbordingPageState extends State<OnbordingPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Welcome to Simply Serve!',
-                                        ),
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginLandingPage(),
                                       ),
                                     );
+                                    //   ScaffoldMessenger.of(context).showSnackBar(
+                                    //     const SnackBar(
+                                    //       content: Text(
+                                    //         'Welcome to Simply Serve!',
+                                    //       ),
+                                    //     ),
+                                    //   );
                                   },
                                   child: Text(
                                     page['buttonText']!,

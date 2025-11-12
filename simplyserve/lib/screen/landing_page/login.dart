@@ -3,6 +3,7 @@ import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_textfromfiled.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
+import 'package:simplyserve/screen/landing_page/landing_page.dart';
 import 'package:simplyserve/screen/landing_page/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -52,6 +53,12 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FA),
+      appBar: AppBar(elevation: 0,backgroundColor: AppColors.white,leading: IconButton(onPressed: (){
+           Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginLandingPage()),
+    );
+      }, icon: Icon(Icons.arrow_back_ios_new_rounded)),),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -76,6 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+
+
                       Container(
                         width: 56,
                         height: 56,

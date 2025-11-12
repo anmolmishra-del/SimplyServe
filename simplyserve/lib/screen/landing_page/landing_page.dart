@@ -4,6 +4,7 @@ import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_textfromfiled.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
 import 'package:simplyserve/custom_widget/social_button.dart';
+import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
 import 'package:simplyserve/screen/landing_page/login.dart';
 import 'package:simplyserve/screen/landing_page/signup_page.dart';
 
@@ -29,7 +30,7 @@ class _LoginLandingPageState extends State<LoginLandingPage> {
 
   void _onContinue() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Replace this with your authentication logic
+   
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Logging in...')));
@@ -134,7 +135,7 @@ class _LoginLandingPageState extends State<LoginLandingPage> {
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    onTap: ()=>Navigator.pushReplacement(
+                    onTap: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const SignupPage(),
@@ -142,13 +143,27 @@ class _LoginLandingPageState extends State<LoginLandingPage> {
                     ),
                     child: const Text(
                       'Sign Up',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    'Continue as Guest',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  GestureDetector(
+                    onTap: () => Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RootScaffold(),
+                      ),
+                    ),
+                    child: const Text(
+                      'Continue as Guest',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
 
                   const SizedBox(height: 22),
@@ -236,7 +251,8 @@ class _LoginLandingPageState extends State<LoginLandingPage> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      'By continuing, you agree to our Terms of Service and Privacy Policy.',
+                      
+                      'By clicking, I accept the Terms & Conditions and Privacy Policy.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: AppColors.lightGrey,
