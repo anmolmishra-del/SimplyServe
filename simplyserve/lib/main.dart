@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/firebase_options.dart';
 import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
-import 'package:simplyserve/screen/landing_page/landing_page.dart';
+
 
 import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
 
@@ -44,16 +45,30 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToHome();
+    _navigateToNext();
   }
 
-  Future<void> _navigateToHome() async {
-    await Future.delayed(const Duration(seconds: 5));
+  Future<void> _navigateToNext() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    final prefs = await SharedPreferences.getInstance();
+    final bool isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+
     if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const OnbordingPage()),
-    );
+
+    if (isLoggedIn) {
+     
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const RootScaffold()),
+      );
+    } else {
+    
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const OnbordingPage()),
+      );
+    }
   }
 
   @override

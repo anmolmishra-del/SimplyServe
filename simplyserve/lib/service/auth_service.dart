@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
+import 'package:simplyserve/screen/landing_page/landing_page.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -8,6 +10,20 @@ class AuthService {
   User? getCurrentUser() {
     return _auth.currentUser;
   }
+
+
+  Future<void> logoutUser(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  await prefs.clear(); // remove user data
+  await FirebaseAuth.instance.signOut();
+
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (_) => const LoginLandingPage()),
+    (route) => false,
+  );
+}
 
   Future<UserCredential> signInWithEmailPassword(
     String email,
@@ -22,6 +38,7 @@ class AuthService {
       throw Exception(e.message ?? 'Login failed');
     }
   }
+
 
   Future<void> signUpWithEmailPassword(
     BuildContext context,
@@ -60,3 +77,6 @@ class AuthService {
     }
   }
 }
+
+
+

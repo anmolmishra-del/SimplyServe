@@ -1,8 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simplyserve/custom_widget/gradient_button.dart';
 import 'package:simplyserve/screen/location/change_location_page.dart';
+import 'package:simplyserve/service/auth_service.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String name="";
+  String email="";
+
+  @override
+  void initState() {
+     dataSet();
+    super.initState();
+  }
+
+  
+  Future<void> dataSet() async {
+     final prefs = await SharedPreferences.getInstance();
+   
+    setState(() {
+       name = prefs.getString('user_name') ?? "";
+        email = prefs.getString('user_email') ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +65,6 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-            // Avatar + name + email
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 24.0,
@@ -58,7 +84,7 @@ class ProfilePage extends StatelessWidget {
 
                   // Name
                   Text(
-                    'Praveen Kumar',
+                   name,
                     style: textTheme.titleLarge?.copyWith(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
@@ -68,7 +94,7 @@ class ProfilePage extends StatelessWidget {
 
                   // Email
                   Text(
-                    'praveen.kumar@example.com',
+                    email,
                     style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                   ),
                 ],
@@ -125,8 +151,13 @@ class ProfilePage extends StatelessWidget {
                     onTap: () {},
                   ),
 
-                  // Extra spacing at bottom so last item isn't too close to edge
-                  const SizedBox(height: 24),
+                
+                  const SizedBox(height: 12),
+
+                  Padding(
+                    padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
+                    child: GradientButton(text: 'Log Out', onPressed:()=> AuthService().logoutUser(context))),
+                   const SizedBox(height: 20),
                 ],
               ),
             ),

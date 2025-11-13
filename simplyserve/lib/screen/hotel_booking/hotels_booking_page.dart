@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/custom_widget/custom_cached_image.dart';
+import 'package:simplyserve/screen/hotel_booking/hotel_detail_page.dart';
 
 class HotelsBookingPage extends StatelessWidget {
   const HotelsBookingPage({super.key});
@@ -204,87 +205,94 @@ class _HotelsBookingScaffoldState extends State<_HotelsBookingScaffold>
   }
 
   Widget _buildListItem(Map<String, dynamic> item) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Row(
-        children: [
-          // image
-          CustomCachedImage(
-            imageUrl: 
-            item['image'] as String,
-            width: 64,
-            height: 64,
-           
-          ),
-
-          const SizedBox(width: 12),
-
-        
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item['title'] as String,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+    return GestureDetector(
+      onTap: ()=>     Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const HotelDetailPage(),
+                          ),
+                        ),    child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        child: Row(
+          children: [
+            // image
+            CustomCachedImage(
+              imageUrl: 
+              item['image'] as String,
+              width: 64,
+              height: 64,
+             
+            ),
+      
+            const SizedBox(width: 12),
+      
+          
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item['title'] as String,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    Text(
-                      item['kind'] as String,
-                      style: TextStyle(color: Colors.black54),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Text(
+                        item['kind'] as String,
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.star, size: 16, color: Colors.grey),
+                      const SizedBox(width: 6),
+                      Text(
+                        (item['rating'] as double).toStringAsFixed(1),
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                
+                  Text(
+                    (item['offer'] as String).split('\n').first,
+                    style: const TextStyle(
+                      color: Color(0xFFFF6D20),
+                      fontWeight: FontWeight.w800,
                     ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.star, size: 16, color: Colors.grey),
-                    const SizedBox(width: 6),
-                    Text(
-                      (item['rating'] as double).toStringAsFixed(1),
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-              
-                Text(
-                  (item['offer'] as String).split('\n').first,
+                  ),
+                ],
+              ),
+            ),
+      
+            const SizedBox(width: 8),
+      
+      
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6),
+                ],
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 120),
+                child: Text(
+                  item['offer'] as String,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Color(0xFFFF6D20),
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(width: 8),
-
-    
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6),
-              ],
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 120),
-              child: Text(
-                item['offer'] as String,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Color(0xFFFF6D20),
-                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

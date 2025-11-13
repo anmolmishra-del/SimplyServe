@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_textfromfiled.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
+import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
 import 'package:simplyserve/screen/landing_page/landing_page.dart';
 import 'package:simplyserve/service/auth_service.dart';
 
@@ -36,36 +38,60 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
-  void _onSignUp() {
-    if (!_acceptTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please accept Terms & Privacy Policy')),
-      );
-      return;
-    }
-    if (_formKey.currentState?.validate() ?? false) {
-      // perform sign up
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Sign Up pressed')));
-    }
-    final _auth = AuthService();
-    if (_passCtrl.text == _confirmCtrl.text) {
-      try {
-        _auth.signUpWithEmailPassword(context, _emailCtrl.text, _passCtrl.text);
-      } catch (e) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(title: Text(e.toString())),
-        );
-      }
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(title: Text('Password dont match')),
-      );
-    }
+
+void _onSignUp() async {
+  if (!_acceptTerms) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please accept Terms & Privacy Policy')),
+    );
+    return;
   }
+
+  if (!(_formKey.currentState?.validate() ?? false)) return;
+
+  final auth = AuthService();
+
+  if (_passCtrl.text != _confirmCtrl.text) {
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        title: Text('Passwords do not match'),
+      ),
+    );
+    return;
+  }
+
+  try {
+    await auth.signUpWithEmailPassword(
+      context,
+      _emailCtrl.text.trim(),
+      _passCtrl.text.trim(),
+    );
+
+
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setBool('is_logged_in', true);
+    await prefs.setString('user_name', _nameCtrl.text.trim());
+    await prefs.setString('user_email', _emailCtrl.text.trim());
+    await prefs.setString('user_phone', _phoneCtrl.text.trim());
+
+    // Navigate to home page
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const RootScaffold()),
+    );
+  } catch (e) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(title: Text(e.toString())),
+    );
+  }
+}
+
+
+
+
 
   Widget _leadingIcon(IconData icon) =>
       Icon(icon, size: 22, color: Colors.black87);

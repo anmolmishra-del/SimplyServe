@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/home_page_custom_code/home_Page_Custom_code.dart';
@@ -9,8 +10,30 @@ import 'package:simplyserve/screen/hotel_booking/hotels_booking_page.dart';
 import 'package:simplyserve/screen/location/change_location_page.dart';
 import 'package:simplyserve/screen/notifications/notifications_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+String name="";
+@override
+  void initState() {
+ dataSet();
+    super.initState();
+  }
+
+  Future<void> dataSet() async {
+     final prefs = await SharedPreferences.getInstance();
+   
+    setState(() {
+       name = prefs.getString('user_name') ?? "";
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +90,8 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Hi, Praveen 👋',
+                     Text(
+                      'Hi, $name 👋',
                       style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.w800,

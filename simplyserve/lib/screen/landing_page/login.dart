@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_textfromfiled.dart';
@@ -36,21 +37,36 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       UserCredential user = await authService.signInWithEmailPassword(
-        _emailController.text,
+        _emailController.text.trim(),
         _passwordController.text,
       );
 
-      // Navigate to homepage if login is successful
       if (user.user != null) {
+        print(user.user);
+        final prefs = await SharedPreferences.getInstance();
+
+        await prefs.setBool('is_logged_in', true);
+        await prefs.setString('user_uid', user.user!.uid);
+
+        if (user.user!.email != null) {
+          await prefs.setString('user_email', user.user!.email!);
+        }
+
+        if (user.user!.displayName != null) {
+          await prefs.setString('user_name', user.user!.displayName!);
+        }
+        if (user.user!.photoURL != null) {
+          await prefs.setString('user_photo', user.user!.photoURL!);
+        }
+
+     
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => const RootScaffold(),
-          ), // your homepage
+          MaterialPageRoute(builder: (context) => const RootScaffold()),
         );
       }
     } catch (e) {
-      // Show error dialog
+    
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
