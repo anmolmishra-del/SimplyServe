@@ -15,7 +15,7 @@ class AuthService {
   Future<void> logoutUser(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
 
-  await prefs.clear(); // remove user data
+  await prefs.clear();
   await FirebaseAuth.instance.signOut();
 
   Navigator.pushAndRemoveUntil(
