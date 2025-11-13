@@ -1,13 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
+import 'package:simplyserve/firebase_options.dart';
 import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
 import 'package:simplyserve/screen/landing_page/landing_page.dart';
 
-
 import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 

@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_textfromfiled.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
+import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
 import 'package:simplyserve/screen/landing_page/landing_page.dart';
 import 'package:simplyserve/screen/landing_page/signup_page.dart';
+import 'package:simplyserve/service/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,11 +29,41 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _onContinue() {
-    if (_formKey.currentState?.validate() ?? false) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Continue pressed')));
+  void _onContinue() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    final authService = AuthService();
+
+    try {
+      UserCredential user = await authService.signInWithEmailPassword(
+        _emailController.text,
+        _passwordController.text,
+      );
+
+      // Navigate to homepage if login is successful
+      if (user.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const RootScaffold(),
+          ), // your homepage
+        );
+      }
+    } catch (e) {
+      // Show error dialog
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Login Failed'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -53,12 +86,19 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FA),
-      appBar: AppBar(elevation: 0,backgroundColor: AppColors.white,leading: IconButton(onPressed: (){
-           Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginLandingPage()),
-    );
-      }, icon: Icon(Icons.arrow_back_ios_new_rounded)),),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: AppColors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginLandingPage()),
+            );
+          },
+          icon: Icon(Icons.arrow_back_ios_new_rounded),
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -83,8 +123,6 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
-
                       Container(
                         width: 56,
                         height: 56,

@@ -4,7 +4,7 @@ import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_textfromfiled.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
 import 'package:simplyserve/screen/landing_page/landing_page.dart';
-
+import 'package:simplyserve/service/auth_service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -38,16 +38,37 @@ class _SignupPageState extends State<SignupPage> {
 
   void _onSignUp() {
     if (!_acceptTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please accept Terms & Privacy Policy')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please accept Terms & Privacy Policy')),
+      );
       return;
     }
     if (_formKey.currentState?.validate() ?? false) {
       // perform sign up
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sign Up pressed')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Sign Up pressed')));
+    }
+    final _auth = AuthService();
+    if (_passCtrl.text == _confirmCtrl.text) {
+      try {
+        _auth.signUpWithEmailPassword(context, _emailCtrl.text, _passCtrl.text);
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(title: Text(e.toString())),
+        );
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(title: Text('Password dont match')),
+      );
     }
   }
 
-  Widget _leadingIcon(IconData icon) => Icon(icon, size: 22, color: Colors.black87);
+  Widget _leadingIcon(IconData icon) =>
+      Icon(icon, size: 22, color: Colors.black87);
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +77,19 @@ class _SignupPageState extends State<SignupPage> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FA),
-       appBar: AppBar(elevation: 0,backgroundColor: AppColors.white,leading: IconButton(onPressed: (){
-        Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginLandingPage()),
-    );
-      }, icon: Icon(Icons.arrow_back_ios_new_rounded)),),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: AppColors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginLandingPage()),
+            );
+          },
+          icon: Icon(Icons.arrow_back_ios_new_rounded),
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 18),
@@ -71,13 +99,19 @@ class _SignupPageState extends State<SignupPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(26),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 24, offset: const Offset(0, 8))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.03),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
-                    Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
@@ -130,11 +164,18 @@ class _SignupPageState extends State<SignupPage> {
                   // Title
                   const Text(
                     'Create your account',
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: Colors.black87),
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black87,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const Text('I agree to Terms & Privacy', style: TextStyle(fontSize: 16, color: Colors.black54)),
+                  const Text(
+                    'I agree to Terms & Privacy',
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
                   const SizedBox(height: 20),
 
                   // Inputs list
@@ -142,7 +183,9 @@ class _SignupPageState extends State<SignupPage> {
                     controller: _nameCtrl,
                     hint: 'Full Name',
                     leadingIcon: _leadingIcon(Icons.person_outline),
-                    validator: (v) => (v == null || v.trim().isEmpty) ? 'Please enter full name' : null,
+                    validator: (v) => (v == null || v.trim().isEmpty)
+                        ? 'Please enter full name'
+                        : null,
                   ),
                   const SizedBox(height: 12),
                   CustomTextField(
@@ -151,8 +194,10 @@ class _SignupPageState extends State<SignupPage> {
                     leadingIcon: _leadingIcon(Icons.email_outlined),
                     keyboardType: TextInputType.emailAddress,
                     validator: (v) {
-                      if (v == null || v.trim().isEmpty) return 'Please enter email';
-                      if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v)) return 'Enter a valid email';
+                      if (v == null || v.trim().isEmpty)
+                        return 'Please enter email';
+                      if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v))
+                        return 'Enter a valid email';
                       return null;
                     },
                   ),
@@ -162,7 +207,9 @@ class _SignupPageState extends State<SignupPage> {
                     hint: 'Phone Number',
                     leadingIcon: _leadingIcon(Icons.phone_outlined),
                     keyboardType: TextInputType.phone,
-                    validator: (v) => (v == null || v.trim().isEmpty) ? 'Please enter phone' : null,
+                    validator: (v) => (v == null || v.trim().isEmpty)
+                        ? 'Please enter phone'
+                        : null,
                   ),
                   const SizedBox(height: 12),
                   CustomTextField(
@@ -172,22 +219,36 @@ class _SignupPageState extends State<SignupPage> {
                     obscureText: _obscurePass,
                     trailing: GestureDetector(
                       onTap: () => setState(() => _obscurePass = !_obscurePass),
-                      child: Icon(_obscurePass ? Icons.visibility_off : Icons.visibility, size: 20),
+                      child: Icon(
+                        _obscurePass ? Icons.visibility_off : Icons.visibility,
+                        size: 20,
+                      ),
                     ),
-                    validator: (v) => (v == null || v.length < 6) ? 'Password must be 6+ chars' : null,
+                    validator: (v) => (v == null || v.length < 6)
+                        ? 'Password must be 6+ chars'
+                        : null,
                   ),
                   const SizedBox(height: 12),
                   CustomTextField(
                     controller: _confirmCtrl,
                     hint: 'Confirm Password',
-                    leadingIcon: _leadingIcon(Icons.ios_share_outlined), // simple icon for confirm
+                    leadingIcon: _leadingIcon(
+                      Icons.ios_share_outlined,
+                    ), // simple icon for confirm
                     obscureText: _obscureConfirm,
                     trailing: GestureDetector(
-                      onTap: () => setState(() => _obscureConfirm = !_obscureConfirm),
-                      child: Icon(_obscureConfirm ? Icons.visibility_off : Icons.visibility, size: 20),
+                      onTap: () =>
+                          setState(() => _obscureConfirm = !_obscureConfirm),
+                      child: Icon(
+                        _obscureConfirm
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        size: 20,
+                      ),
                     ),
                     validator: (v) {
-                      if (v == null || v.isEmpty) return 'Please confirm password';
+                      if (v == null || v.isEmpty)
+                        return 'Please confirm password';
                       if (v != _passCtrl.text) return 'Passwords do not match';
                       return null;
                     },
@@ -200,32 +261,49 @@ class _SignupPageState extends State<SignupPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () => setState(() => _acceptTerms = !_acceptTerms),
+                        onTap: () =>
+                            setState(() => _acceptTerms = !_acceptTerms),
                         child: Container(
                           width: 22,
                           height: 22,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(color: const Color(0xFFBDBDBD)),
-                            color: _acceptTerms ? const Color(0xFFFFA500) : Colors.white,
+                            color: _acceptTerms
+                                ? const Color(0xFFFFA500)
+                                : Colors.white,
                           ),
-                          child: _acceptTerms ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
+                          child: _acceptTerms
+                              ? const Icon(
+                                  Icons.check,
+                                  size: 16,
+                                  color: Colors.white,
+                                )
+                              : null,
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => setState(() => _acceptTerms = !_acceptTerms),
-                          child: const Text('I agree to Terms & Privacy Policy', style: TextStyle(fontSize: 16)),
+                          onTap: () =>
+                              setState(() => _acceptTerms = !_acceptTerms),
+                          child: const Text(
+                            'I agree to Terms & Privacy Policy',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
 
                   const SizedBox(height: 18),
 
                   // Sign Up button
-                  GradientButton(text: 'Sign Up', onPressed: _onSignUp, height: 56, ),
+                  GradientButton(
+                    text: 'Sign Up',
+                    onPressed: _onSignUp,
+                    height: 56,
+                  ),
 
                   const SizedBox(height: 18),
 
@@ -235,7 +313,10 @@ class _SignupPageState extends State<SignupPage> {
                       Expanded(child: Divider(color: Color(0xFFECECEC))),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Text('Or sign up with', style: TextStyle(color: Colors.black54)),
+                        child: Text(
+                          'Or sign up with',
+                          style: TextStyle(color: Colors.black54),
+                        ),
                       ),
                       Expanded(child: Divider(color: Color(0xFFECECEC))),
                     ],
@@ -244,11 +325,23 @@ class _SignupPageState extends State<SignupPage> {
                   const SizedBox(height: 14),
 
                   // Social single-column: icon at left + label to right (like screenshot)
-                  _SocialRowButton(icon: 'assets/images/google.png', label: 'Continue with Google', onTap: () {}),
+                  _SocialRowButton(
+                    icon: 'assets/images/google.png',
+                    label: 'Continue with Google',
+                    onTap: () {},
+                  ),
                   const SizedBox(height: 12),
-                  _SocialRowButton(icon: 'assets/images/facebook.png', label: 'Continue with Facebook', onTap: () {}),
+                  _SocialRowButton(
+                    icon: 'assets/images/facebook.png',
+                    label: 'Continue with Facebook',
+                    onTap: () {},
+                  ),
                   const SizedBox(height: 12),
-                  _SocialRowButton(icon: 'assets/images/apple.png', label: 'Continue with Apple', onTap: () {}),
+                  _SocialRowButton(
+                    icon: 'assets/images/apple.png',
+                    label: 'Continue with Apple',
+                    onTap: () {},
+                  ),
                 ],
               ),
             ),
@@ -263,7 +356,12 @@ class _SocialRowButton extends StatelessWidget {
   final String icon;
   final String label;
   final VoidCallback onTap;
-  const _SocialRowButton({Key? key, required this.icon, required this.label, required this.onTap}) : super(key: key);
+  const _SocialRowButton({
+    Key? key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +373,9 @@ class _SocialRowButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.white,
           side: const BorderSide(color: Color(0xFFECECEC)),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 12),
         ),
         child: Row(
@@ -283,15 +383,25 @@ class _SocialRowButton extends StatelessWidget {
             Container(
               width: 44,
               height: 44,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(6.0),
-                child: Image.asset(icon, fit: BoxFit.contain, errorBuilder: (c, e, s) => const Icon(Icons.account_circle)),
+                child: Image.asset(
+                  icon,
+                  fit: BoxFit.contain,
+                  errorBuilder: (c, e, s) => const Icon(Icons.account_circle),
+                ),
               ),
             ),
             const SizedBox(width: 14),
             Expanded(
-              child: Text(label, style: const TextStyle(fontSize: 16, color: Colors.black87)),
+              child: Text(
+                label,
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              ),
             ),
           ],
         ),
