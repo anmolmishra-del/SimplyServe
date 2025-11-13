@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1082210299848",
+    "firebase_url": "https://chatapp-8a3d1-default-rtdb.firebaseio.com",
+    "project_id": "chatapp-8a3d1",
+    "storage_bucket": "chatapp-8a3d1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082210299848:android:d0f0281f659afafb375afd",
+        "android_client_info": {
+          "package_name": "com.example.simplyserve"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDda2duWqSTYuzbX84DfW3F59XfiJ4ZkkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082210299848:android:b43561e86a3f5cc1375afd",
+        "android_client_info": {
+          "package_name": "com.example.superapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDda2duWqSTYuzbX84DfW3F59XfiJ4ZkkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
