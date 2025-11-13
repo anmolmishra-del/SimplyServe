@@ -280,7 +280,14 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 22),
 
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RootScaffold(),
+                        ),
+                      );
+                    },
                     child: const Text(
                       'Continue as Guest',
                       style: TextStyle(

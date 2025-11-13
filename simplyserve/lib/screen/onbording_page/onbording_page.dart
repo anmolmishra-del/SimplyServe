@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/screen/landing_page/landing_page.dart';
+import 'package:simplyserve/screen/landing_page/login.dart';
 
 class OnbordingPage extends StatefulWidget {
   const OnbordingPage({super.key});
@@ -112,7 +113,7 @@ class _OnbordingPageState extends State<OnbordingPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const LoginLandingPage(),
+                                            const LoginPage(),
                                       ),
                                     );
                                     //   ScaffoldMessenger.of(context).showSnackBar(
