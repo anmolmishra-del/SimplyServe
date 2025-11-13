@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
+import 'package:simplyserve/const/image.dart';
+import 'package:simplyserve/custom_widget/custom_cached_image.dart';
 
 class PromoCard extends StatelessWidget {
   final double height;
@@ -46,12 +47,10 @@ class PromoCard extends StatelessWidget {
               child: SizedBox(
                 width: height - 24,
                 height: height - 24,
-                child: Image.asset(
-                  imageAsset,
+                child: CustomCachedImage(
+                  fallbackAsset: AppImage.item1,
+                  imageUrl: imageAsset,
                   fit: BoxFit.cover,
-                  errorBuilder: (c, e, s) {
-                    return Container(color: Colors.white24);
-                  },
                 ),
               ),
             ),
@@ -74,40 +73,61 @@ class PromoCard extends StatelessWidget {
 }
 
 class FeatureIcon extends StatelessWidget {
+  final VoidCallback onPressed; // <— Add this line
   final String image;
   final String label;
-  const FeatureIcon({super.key, required this.image, required this.label});
+
+  const FeatureIcon({
+    super.key,
+    required this.image,
+    required this.label,
+    required this.onPressed, // <— Required callback
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 90,
-            height: 90,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFECECEC)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onPressed, // <— Trigger when tapped
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 90,
+              height: 90,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFECECEC)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.05),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(image, width: 40, height: 40),
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(child: Image.asset(image,width: 40,height:40,)),
-                const SizedBox(height: 8),
-                Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 13,fontWeight: FontWeight.w500)),
-                
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

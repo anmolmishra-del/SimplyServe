@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/home_page_custom_code/home_Page_Custom_code.dart';
-
+import 'package:simplyserve/screen/food_order/order_food_page.dart';
+import 'package:simplyserve/screen/groceries/groceries_page.dart';
+import 'package:simplyserve/screen/home/profile_page.dart';
+import 'package:simplyserve/screen/hotel_booking/hotels_booking_page.dart';
+import 'package:simplyserve/screen/location/change_location_page.dart';
+import 'package:simplyserve/screen/notifications/notifications_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -21,10 +26,16 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.location_city,
-                      size: 20,
-                      color: AppColors.black
+                    IconButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChangeLocationPage(),
+                        ),
+                      ),
+                      icon: Icon(Icons.location_city),
+
+                      color: AppColors.black,
                     ),
                     const SizedBox(width: 8),
                     const Expanded(
@@ -35,13 +46,19 @@ class HomePage extends StatelessWidget {
                     ),
                     IconButton(
                       icon: const Icon(Icons.notifications_none),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const NotificationsPage(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
 
-      
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18.0,
@@ -81,12 +98,10 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                   
                   ],
                 ),
               ),
 
-          
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Column(
@@ -98,7 +113,7 @@ class HomePage extends StatelessWidget {
                     //   onTap: () {},
                     // ),
                     const SizedBox(height: 12),
-                    Image.asset(AppImage.offerHomePage)
+                    Image.asset(AppImage.offerHomePage),
                     // PromoCard(
                     //   height: 88,
                     //   imageAsset: 'assets/images/promo_food.png',
@@ -115,21 +130,61 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    FeatureIcon(image: AppImage.orderFoodIcon, label: 'Order Food'),
+                  children: [
                     FeatureIcon(
-                     image: AppImage.shopGroceriesIcon,
+                      onPressed: () {
+                         Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const OrderFoodPage(),
+                          ),
+                        );
+                      },
+                      image: AppImage.orderFoodIcon,
+                      label: 'Order Food',
+                    ),
+                    FeatureIcon(
+                      onPressed: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const GroceriesPage(),
+                          ),
+                        );
+                      },
+                      image: AppImage.shopGroceriesIcon,
                       label: 'Shop Groceries',
                     ),
-                    FeatureIcon(image: AppImage.bookHotelIcon, label: 'Book Hotels'),
-                    FeatureIcon(image: AppImage.profileIcon, label: 'Profile'),
+                    FeatureIcon(
+                      onPressed: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const HotelsBookingPage(),
+                          ),
+                        );
+                      },
+                      image: AppImage.bookHotelIcon,
+                      label: 'Book Hotels',
+                    ),
+                    // FeatureIcon(
+                    //   image: AppImage.profileIcon,
+                    //   label: 'Profile',
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (_) => const ProfilePage(),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),
 
               const SizedBox(height: 22),
 
-         
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Column(

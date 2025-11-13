@@ -12,7 +12,9 @@ static const String bookHotelIcon = 'assets/images/book_hotel_icon.png';
 static const String orderFoodIcon = 'assets/images/order_food_icon.png';
 static const String profileIcon = 'assets/images/profile_icon.png';
 static const String shopGroceriesIcon = 'assets/images/shop_groceries_icon.png';
-
+static const String offers1 = 'assets/images/offers1.png';
+static const String offers2 = 'assets/images/offers2.png';
+static const String offers3 = 'assets/images/offers3.png';
 
  
   static const String bucket = 'assets/images/bucket.png';
