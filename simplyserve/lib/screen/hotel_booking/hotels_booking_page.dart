@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/custom_widget/custom_cached_image.dart';
-import 'package:simplyserve/screen/hotel_booking/hotel_detail_page.dart';
+import 'package:simplyserve/routes.dart';
 
 class HotelsBookingPage extends StatelessWidget {
   const HotelsBookingPage({super.key});
@@ -206,12 +206,8 @@ class _HotelsBookingScaffoldState extends State<_HotelsBookingScaffold>
 
   Widget _buildListItem(Map<String, dynamic> item) {
     return GestureDetector(
-      onTap: ()=>     Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const HotelDetailPage(),
-                          ),
-                        ),    child: Padding(
+      onTap: () => Navigator.pushNamed(context, Routes.hotelDetail),
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Row(
           children: [

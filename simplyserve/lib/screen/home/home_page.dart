@@ -3,12 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/home_page_custom_code/home_Page_Custom_code.dart';
-import 'package:simplyserve/screen/food_order/order_food_page.dart';
-import 'package:simplyserve/screen/groceries/groceries_page.dart';
-import 'package:simplyserve/screen/home/profile_page.dart';
-import 'package:simplyserve/screen/hotel_booking/hotels_booking_page.dart';
-import 'package:simplyserve/screen/location/change_location_page.dart';
-import 'package:simplyserve/screen/notifications/notifications_page.dart';
+import 'package:simplyserve/routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,7 +32,6 @@ String name="";
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -50,12 +44,7 @@ String name="";
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ChangeLocationPage(),
-                        ),
-                      ),
+                      onPressed: () => Navigator.pushNamed(context, Routes.changeLocation),
                       icon: Icon(Icons.location_city),
 
                       color: AppColors.black,
@@ -70,12 +59,7 @@ String name="";
                     IconButton(
                       icon: const Icon(Icons.notifications_none),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const NotificationsPage(),
-                          ),
-                        );
+                        Navigator.pushNamed(context, Routes.notifications);
                       },
                     ),
                   ],
@@ -156,36 +140,21 @@ String name="";
                   children: [
                     FeatureIcon(
                       onPressed: () {
-                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const OrderFoodPage(),
-                          ),
-                        );
+                         Navigator.pushNamed(context, Routes.orderFood);
                       },
                       image: AppImage.orderFoodIcon,
                       label: 'Order Food',
                     ),
                     FeatureIcon(
                       onPressed: () {
-                          Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const GroceriesPage(),
-                          ),
-                        );
+                          Navigator.pushNamed(context, Routes.groceries);
                       },
                       image: AppImage.shopGroceriesIcon,
                       label: 'Shop Groceries',
                     ),
                     FeatureIcon(
                       onPressed: () {
-                          Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const HotelsBookingPage(),
-                          ),
-                        );
+                          Navigator.pushNamed(context, Routes.hotels);
                       },
                       image: AppImage.bookHotelIcon,
                       label: 'Book Hotels',

@@ -3,7 +3,7 @@ import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_cached_image.dart';
 import 'package:simplyserve/custom_widget/home_page_custom_code/home_Page_Custom_code.dart';
-import 'package:simplyserve/screen/food_order/order_detail_page.dart';
+import 'package:simplyserve/routes.dart';
 
 class OrderFoodPage extends StatefulWidget {
   const OrderFoodPage({super.key});
@@ -218,12 +218,7 @@ class _OrderFoodPageState extends State<OrderFoodPage> {
                         //   SnackBar(content: Text('Open ${r['name']}')),
                         // );
 
-                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const RestaurantDetailPageUiMatch(),
-                          ),
-                        );
+                         Navigator.pushNamed(context, Routes.restaurantDetail);
                       },
                       child: Row(
                         children: [

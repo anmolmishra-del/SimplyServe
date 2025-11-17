@@ -4,10 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/firebase_options.dart';
-import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
 
-
-import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
+import 'package:simplyserve/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +27,7 @@ class MyApp extends StatelessWidget {
 
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
       ),
+      routes: Routes.getAll(),
       home: const SplashScreen(),
     );
   }
@@ -58,16 +57,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (isLoggedIn) {
      
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const RootScaffold()),
-      );
+      Navigator.pushReplacementNamed(context, Routes.home);
     } else {
     
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const OnbordingPage()),
-      );
+      Navigator.pushReplacementNamed(context, Routes.onboarding);
     }
   }
 

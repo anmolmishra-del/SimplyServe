@@ -5,9 +5,7 @@ import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_textfromfiled.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
-import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
-import 'package:simplyserve/screen/landing_page/landing_page.dart';
-import 'package:simplyserve/screen/landing_page/signup_page.dart';
+import 'package:simplyserve/routes.dart';
 import 'package:simplyserve/service/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -60,10 +58,7 @@ class _LoginPageState extends State<LoginPage> {
         }
 
      
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const RootScaffold()),
-        );
+        Navigator.pushReplacementNamed(context, Routes.home);
       }
     } catch (e) {
     
@@ -84,10 +79,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onSignUp() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const SignupPage()),
-    );
+    Navigator.pushReplacementNamed(context, Routes.signup);
   }
 
   void _onForgotPassword() {
@@ -107,10 +99,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: AppColors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginLandingPage()),
-            );
+            Navigator.pushReplacementNamed(context, Routes.loginLanding);
           },
           icon: Icon(Icons.arrow_back_ios_new_rounded),
         ),
@@ -297,12 +286,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RootScaffold(),
-                        ),
-                      );
+                      Navigator.pushReplacementNamed(context, Routes.home);
                     },
                     child: const Text(
                       'Continue as Guest',

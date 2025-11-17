@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
-import 'package:simplyserve/screen/landing_page/landing_page.dart';
-import 'package:simplyserve/screen/landing_page/login.dart';
+import 'package:simplyserve/routes.dart';
+// import 'package:simplyserve/screen/landing_page/landing_page.dart';
 
 class OnbordingPage extends StatefulWidget {
   const OnbordingPage({super.key});
@@ -109,12 +109,9 @@ class _OnbordingPageState extends State<OnbordingPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    Navigator.pushReplacement(
+                                    Navigator.pushReplacementNamed(
                                       context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginPage(),
-                                      ),
+                                      Routes.login,
                                     );
                                     //   ScaffoldMessenger.of(context).showSnackBar(
                                     //     const SnackBar(

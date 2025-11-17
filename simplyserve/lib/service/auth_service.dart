@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
-import 'package:simplyserve/screen/landing_page/landing_page.dart';
+import 'package:simplyserve/routes.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,9 +17,9 @@ class AuthService {
   await prefs.clear();
   await FirebaseAuth.instance.signOut();
 
-  Navigator.pushAndRemoveUntil(
+  Navigator.pushNamedAndRemoveUntil(
     context,
-    MaterialPageRoute(builder: (_) => const LoginLandingPage()),
+    Routes.loginLanding,
     (route) => false,
   );
 }
@@ -56,10 +55,7 @@ class AuthService {
       if (userCredential.user != null) {
         // Navigate to another page
         print(userCredential.user);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const RootScaffold()),
-        );
+        Navigator.pushReplacementNamed(context, Routes.home);
       } else {
         // Something went wrong
         ScaffoldMessenger.of(

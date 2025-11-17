@@ -4,9 +4,7 @@ import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_textfromfiled.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
 import 'package:simplyserve/custom_widget/social_button.dart';
-import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
-import 'package:simplyserve/screen/landing_page/login.dart';
-import 'package:simplyserve/screen/landing_page/signup_page.dart';
+import 'package:simplyserve/routes.dart';
 
 class LoginLandingPage extends StatefulWidget {
   const LoginLandingPage({super.key});
@@ -119,11 +117,9 @@ class _LoginLandingPageState extends State<LoginLandingPage> {
 
                   const SizedBox(height: 28),
                   GestureDetector(
-                    onTap: () => Navigator.pushReplacement(
+                    onTap: () => Navigator.pushReplacementNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
+                      Routes.login,
                     ),
                     child: const Text(
                       'Login',
@@ -135,11 +131,9 @@ class _LoginLandingPageState extends State<LoginLandingPage> {
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    onTap: () => Navigator.pushReplacement(
+                    onTap: () => Navigator.pushReplacementNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignupPage(),
-                      ),
+                      Routes.signup,
                     ),
                     child: const Text(
                       'Sign Up',
@@ -151,11 +145,9 @@ class _LoginLandingPageState extends State<LoginLandingPage> {
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    onTap: () => Navigator.pushReplacement(
+                    onTap: () => Navigator.pushReplacementNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const RootScaffold(),
-                      ),
+                      Routes.home,
                     ),
                     child: const Text(
                       'Continue as Guest',

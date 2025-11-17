@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
-import 'package:simplyserve/screen/location/change_location_page.dart';
+import 'package:simplyserve/routes.dart';
 import 'package:simplyserve/service/auth_service.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -118,11 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: Icons.location_on_outlined,
                     title: 'Manage Addresses',
                     onTap: () {
-                   Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => const ChangeLocationPage()),
-);
-
+                      Navigator.pushNamed(context, Routes.changeLocation);
                     },
                   ),
                   _ProfileTile(
