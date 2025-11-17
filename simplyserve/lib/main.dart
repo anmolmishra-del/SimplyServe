@@ -1,15 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/firebase_options.dart';
 
 import 'package:simplyserve/routes.dart';
+import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
+import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  MapboxOptions.setAccessToken(
+    "pk.eyJ1IjoicHNkazA2MTUiLCJhIjoiY20zZWFmdjRpMGJoMDJrcXg1YTg3MmRjaSJ9.RAP8pKqKVTaHQo1GDcd_kw",
+  );
   runApp(const MyApp());
 }
 
