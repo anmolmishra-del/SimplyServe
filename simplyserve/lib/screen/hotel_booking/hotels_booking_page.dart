@@ -241,7 +241,7 @@ class _HotelsBookingScaffoldState extends State<_HotelsBookingScaffold>
                         item['kind'] as String,
                         style: TextStyle(color: Colors.black54),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 6),
                       const Icon(Icons.star, size: 16, color: Colors.grey),
                       const SizedBox(width: 6),
                       Text(

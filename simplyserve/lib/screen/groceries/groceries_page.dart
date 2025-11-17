@@ -597,7 +597,7 @@ class _GroceriesPageState extends State<GroceriesPage> {
     final cardSpacing = 30;
     final width = (MediaQuery.of(context).size.width - cardSpacing) / 2;
 
-    const double trailingWidth = 78;
+    const double trailingWidth = 65;
 
     return Container(
       width: width,
