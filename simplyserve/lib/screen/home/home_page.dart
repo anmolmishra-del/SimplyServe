@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
@@ -18,22 +20,93 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _cityName = 'Fetching location...';
+  String name = "";
 
-String name="";
-@override
+  @override
   void initState() {
- dataSet();
     super.initState();
+    dataSet();
+    _getCurrentCity();
   }
+
+  Future<void> _getCurrentCity() async {
+    try {
+      // Check if location service is enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Location services are disabled')),
+        );
+        return;
+      }
+
+      // Check permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permission denied')),
+          );
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Location permission permanently denied'),
+          ),
+        );
+        return;
+      }
+
+      // Get current location
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Get placemark info (city, country)
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        String city = placemarks[0].locality ?? 'Unknown';
+        setState(() {
+          _cityName = city;
+        });
+      } else {
+        setState(() {
+          _cityName = 'Unknown';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _cityName = 'Error';
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error getting location: $e')));
+    }
+  }
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   dataSet();
+  //   // ✅ call location function here
+  // }
 
   Future<void> dataSet() async {
-     final prefs = await SharedPreferences.getInstance();
-   
+    final prefs = await SharedPreferences.getInstance();
+
     setState(() {
-       name = prefs.getString('user_name') ?? "";
+      name = prefs.getString('user_name') ?? "";
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +133,10 @@ String name="";
 
                       color: AppColors.black,
                     ),
-                    const SizedBox(width: 8),
-                    const Expanded(
+                    SizedBox(width: 8),
+                    Expanded(
                       child: Text(
-                        'Hiydaravan,',
+                        _cityName ?? 'Fetching location...',
                         style: TextStyle(color: AppColors.black),
                       ),
                     ),
@@ -90,7 +163,7 @@ String name="";
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Text(
+                    Text(
                       'Hi, $name 👋',
                       style: TextStyle(
                         fontSize: 34,
@@ -156,7 +229,7 @@ String name="";
                   children: [
                     FeatureIcon(
                       onPressed: () {
-                         Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => const OrderFoodPage(),
@@ -168,7 +241,7 @@ String name="";
                     ),
                     FeatureIcon(
                       onPressed: () {
-                          Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => const GroceriesPage(),
@@ -180,7 +253,7 @@ String name="";
                     ),
                     FeatureIcon(
                       onPressed: () {
-                          Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => const HotelsBookingPage(),

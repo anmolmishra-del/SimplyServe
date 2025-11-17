@@ -1,9 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 <uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    
+    
     <application
         android:label="simplyserve"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="MAPBOX_ACCESS_TOKEN"
+           android:value="pk.eyJ1IjoicHNkazA2MTUiLCJhIjoiY20zZWFmdjRpMGJoMDJrcXg1YTg3MmRjaSJ9.RAP8pKqKVTaHQo1GDcd_kw"
+ />
         <activity
             android:name=".MainActivity"
             android:exported="true"

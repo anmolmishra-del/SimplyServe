@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' hide Position;
 import 'package:simplyserve/const/colour.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
+import 'package:simplyserve/screen/location/fullmap_page.dart';
 
 class ChangeLocationPage extends StatefulWidget {
   const ChangeLocationPage({super.key});
@@ -10,6 +15,8 @@ class ChangeLocationPage extends StatefulWidget {
 
 class _ChangeLocationPageState extends State<ChangeLocationPage> {
   final TextEditingController _searchController = TextEditingController();
+  MapboxMap? _mapController;
+
   final List<Map<String, String>> _savedLocations = [
     {'label': 'Home', 'subtitle': 'Hyderabad, India'},
     {'label': 'Work', 'subtitle': 'Hitech City'},
@@ -21,7 +28,49 @@ class _ChangeLocationPageState extends State<ChangeLocationPage> {
     super.dispose();
   }
 
-  void _useCurrentLocation() {
+  void _useCurrentLocation() async {
+    try {
+      // Check and request location permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permission denied')),
+          );
+          return;
+        }
+      }
+
+      // Get current position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              FullMapPage(lat: position.latitude, lng: position.longitude),
+        ),
+      );
+      // Convert coordinates to city name
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      String city = placemarks[0].locality ?? 'Unknown location';
+
+      // Show the city name
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('You are in $city')));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error getting location: $e')));
+    }
+
     // TODO: wire location permission + actual location fetching
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Using current location (demo)')),
@@ -90,40 +139,32 @@ class _ChangeLocationPageState extends State<ChangeLocationPage> {
                 ),
                 child: Stack(
                   children: [
-                    // light map-like pattern (for demo we use simple shapes)
                     Positioned.fill(
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            color: const Color(0xFFFFF8F2),
-                            child: CustomPaint(painter: _SimpleMapPainter()),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // pin icon center
-                    Center(
-                      child: Container(
-                        width: 38,
-                        height: 38,
-                        decoration: BoxDecoration(
-                          color: orange,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: orange.withOpacity(0.25),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
+                          child: MapWidget(
+                            styleUri: MapboxStyles.MAPBOX_STREETS, // add style
+                            // resourceOptions: ResourceOptions(
+                            //   accessToken: dotenv.env["MAPBOX_ACCESS_TOKEN"],
+                            // ),
+                            cameraOptions: CameraOptions(
+                              center: Point(
+                                coordinates: mapbox.Position(78.4867, 17.3850),
+                                // lng, lat
+                              ),
+                              zoom: 14,
                             ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                          size: 22,
+                            onMapCreated: (map) {
+                              map.location.updateSettings(
+                                LocationComponentSettings(
+                                  enabled: false,
+                                  pulsingEnabled: true,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -249,51 +290,4 @@ class _ChangeLocationPageState extends State<ChangeLocationPage> {
       ),
     );
   }
-}
-
-
-class _SimpleMapPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = const Color(0xFFFFF0E6);
-    canvas.drawRect(Offset.zero & size, paint);
-
-    final linePaint = Paint()
-      ..color = const Color(0xFFEFE6DA)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 8
-      ..strokeCap = StrokeCap.round;
-
-    // draw some roads
-    canvas.drawLine(
-      Offset(size.width * 0.1, size.height * 0.2),
-      Offset(size.width * 0.9, size.height * 0.25),
-      linePaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.15, size.height * 0.8),
-      Offset(size.width * 0.85, size.height * 0.65),
-      linePaint,
-    );
-
-    final thinPaint = Paint()
-      ..color = const Color(0xFFF5E8D9)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawLine(
-      Offset(size.width * 0.2, size.height * 0.1),
-      Offset(size.width * 0.25, size.height * 0.9),
-      thinPaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.45, size.height * 0.05),
-      Offset(size.width * 0.45, size.height * 0.95),
-      thinPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

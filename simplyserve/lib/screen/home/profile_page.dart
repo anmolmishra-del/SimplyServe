@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/custom_widget/gradient_button.dart';
 import 'package:simplyserve/screen/location/change_location_page.dart';
 import 'package:simplyserve/service/auth_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,23 +16,88 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String name="";
-  String email="";
-
+  String name = "";
+  String email = "";
+  String? imageUrl;
+  final ImagePicker _picker = ImagePicker();
   @override
   void initState() {
-     dataSet();
+    dataSet();
     super.initState();
   }
 
-  
   Future<void> dataSet() async {
-     final prefs = await SharedPreferences.getInstance();
-   
+    final prefs = await SharedPreferences.getInstance();
+
     setState(() {
-       name = prefs.getString('user_name') ?? "";
-        email = prefs.getString('user_email') ?? "";
+      name = prefs.getString('user_name') ?? "";
+      email = prefs.getString('user_email') ?? "";
     });
+  }
+
+  Future<void> pickAndUploadImage(ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile == null) return;
+
+      File imageFile = File(pickedFile.path);
+
+      // Create reference with unique name
+      final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('profile_images')
+          .child('$fileName.jpg');
+
+      // Upload file and wait for completion
+      final uploadTask = storageRef.putFile(imageFile);
+
+      // Wait until upload completes successfully
+      final snapshot = await uploadTask.whenComplete(() => null);
+
+      // Get download URL safely after upload completes
+      final downloadURL = await snapshot.ref.getDownloadURL();
+
+      setState(() {
+        imageUrl = downloadURL;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Image uploaded successfully!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error uploading image: $e')));
+    }
+  }
+
+  void showImageSourceDialog() {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Take Photo'),
+              onTap: () {
+                Navigator.pop(context);
+                pickAndUploadImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                pickAndUploadImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -40,7 +109,6 @@ class _ProfilePageState extends State<ProfilePage> {
       body: SafeArea(
         child: Column(
           children: [
-        
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,
@@ -48,8 +116,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Row(
                 children: [
-                 
-                
                   const SizedBox(width: 12),
                   const Text(
                     'Profile',
@@ -72,19 +138,56 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Column(
                 children: [
-                  // Avatar
-                  CircleAvatar(
-                    radius: 48,
-                    backgroundColor: Colors.grey.shade200,
-                    backgroundImage: const NetworkImage(
-                      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=580',
-                    ), // replace with AssetImage if you have local avatar
+                  // Avatar with camera icon overlay
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 48,
+                        backgroundColor: Colors.grey.shade200,
+                        backgroundImage: imageUrl != null
+                            ? NetworkImage(imageUrl!)
+                            : const NetworkImage(
+                                'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+                              ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap:
+                              showImageSourceDialog, // your function to pick/upload image
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.blue,
+                              size: 28,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+
+                    // Optional: You can remove the ElevatedButton completely
+                    // ElevatedButton.icon(
+                    //   onPressed: showImageSourceDialog,
+                    //   icon: const Icon(Icons.upload),
+                    //   label: const Text("Upload Image"),
+                    // ),
+
+                    // backgroundImage: const NetworkImage(
+                    //   'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=580',
+                    // ), // replace with AssetImage if you have local avatar
                   ),
                   const SizedBox(height: 16),
 
                   // Name
                   Text(
-                   name,
+                    name,
                     style: textTheme.titleLarge?.copyWith(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
@@ -118,11 +221,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: Icons.location_on_outlined,
                     title: 'Manage Addresses',
                     onTap: () {
-                   Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => const ChangeLocationPage()),
-);
-
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChangeLocationPage(),
+                        ),
+                      );
                     },
                   ),
                   _ProfileTile(
@@ -151,13 +255,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: () {},
                   ),
 
-                
                   const SizedBox(height: 12),
 
                   Padding(
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
-                    child: GradientButton(text: 'Log Out', onPressed:()=> AuthService().logoutUser(context))),
-                   const SizedBox(height: 20),
+                    child: GradientButton(
+                      text: 'Log Out',
+                      onPressed: () => AuthService().logoutUser(context),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
