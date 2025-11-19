@@ -18,5 +18,6 @@ class AppImage {
   static const String offers3 = 'assets/images/offers3.png';
   static const String bucket = 'assets/images/bucket.png';
   static const String hotel = 'assets/images/bucket.png';
-  static const String hand = 'assets/images/hand.png';
+  static const String travelIcon = 'assets/images/travel_icon.png';
+  static const String travelOffer = 'assets/images/travel_offer.png';
 }

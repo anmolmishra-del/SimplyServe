@@ -12,10 +12,7 @@ import 'package:simplyserve/screen/hotel_booking/hotels_booking_page.dart';
 import 'package:simplyserve/screen/hotel_booking/hotel_detail_page.dart';
 import 'package:simplyserve/screen/food_order/order_detail_page.dart';
 
-/// Centralized route names and a route map for the app.
-///
-/// Use `Navigator.pushNamed(context, Routes.login)` etc. This file
-/// intentionally keeps a small set of stable routes used across the app.
+
 class Routes {
   Routes._();
 

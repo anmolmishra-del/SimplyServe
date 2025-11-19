@@ -6,6 +6,7 @@ import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/home_page_custom_code/home_Page_Custom_code.dart';
 import 'package:simplyserve/routes.dart';
+import 'package:simplyserve/screen/travel/travel_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -232,18 +233,18 @@ class _HomePageState extends State<HomePage> {
                       image: AppImage.bookHotelIcon,
                       label: 'Book Hotels',
                     ),
-                    // FeatureIcon(
-                    //   image: AppImage.profileIcon,
-                    //   label: 'Profile',
-                    //   onPressed: () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (_) => const ProfilePage(),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
+                    FeatureIcon(
+                      image: AppImage.travelIcon,
+                      label: 'Travel',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const TravelHome(),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
