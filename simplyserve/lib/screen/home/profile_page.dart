@@ -20,9 +20,12 @@ class _ProfilePageState extends State<ProfilePage> {
   String email = "";
   String? imageUrl;
   final ImagePicker _picker = ImagePicker();
+
+  bool isLoggedIn = false;
   @override
   void initState() {
     dataSet();
+
     super.initState();
   }
 
@@ -30,6 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
+      isLoggedIn = prefs.getBool('is_logged_in') ?? false;
       name = prefs.getString('user_name') ?? "";
       email = prefs.getString('user_email') ?? "";
     });
@@ -125,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   // Settings icon
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.settings_outlined),
+                    icon: isLoggedIn ? Icon(Icons.settings_outlined) : Text(''),
                   ),
                 ],
               ),
@@ -141,15 +145,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   // Avatar with camera icon overlay
                   Stack(
                     children: [
-                      CircleAvatar(
-                        radius: 48,
-                        backgroundColor: Colors.grey.shade200,
-                        backgroundImage: imageUrl != null
-                            ? NetworkImage(imageUrl!)
-                            : const NetworkImage(
-                                'https://cdn-icons-png.flaticon.com/512/847/847969.png',
-                              ),
-                      ),
+                      isLoggedIn
+                          ? CircleAvatar(
+                              radius: 48,
+                              backgroundColor: Colors.grey.shade200,
+                              backgroundImage: imageUrl != null
+                                  ? NetworkImage(imageUrl!)
+                                  : NetworkImage(
+                                      ' https://cdn-icons-png.flaticon.com/512/847/847969.png ',
+                                    ),
+                            )
+                          : Text(''),
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -186,20 +192,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 16),
 
                   // Name
-                  Text(
-                    name,
-                    style: textTheme.titleLarge?.copyWith(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
+                  isLoggedIn
+                      ? Text(
+                          name,
+                          style: textTheme.titleLarge?.copyWith(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        )
+                      : Text(' '),
+                  SizedBox(height: 6),
 
                   // Email
-                  Text(
-                    email,
-                    style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-                  ),
+                  isLoggedIn
+                      ? Text(
+                          email,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey.shade700,
+                          ),
+                        )
+                      : Text(''),
                 ],
               ),
             ),
@@ -255,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Padding(
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
                     child: GradientButton(
-                      text: 'Log Out',
+                      text: isLoggedIn ? 'Log Out' : "Login",
                       onPressed: () => AuthService().logoutUser(context),
                     ),
                   ),

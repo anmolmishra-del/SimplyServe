@@ -1,9 +1,11 @@
 // lib/screen/groceries/groceries_page.dart
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/custom_widget/custom_cached_image.dart';
 import 'package:simplyserve/screen/groceries/model/groceries_page_model.dart';
+import 'package:simplyserve/screen/landing_page/login.dart';
 
 class GroceriesPage extends StatefulWidget {
   const GroceriesPage({super.key});
@@ -14,6 +16,7 @@ class GroceriesPage extends StatefulWidget {
 
 class _GroceriesPageState extends State<GroceriesPage> {
   // Mock categories + items
+
   final Map<String, List<Product>> _sections = {
     'Fruits & Vegetables': [
       Product(name: 'Fresh Apples', price: 120, image: AppImage.item1),
@@ -214,6 +217,20 @@ class _GroceriesPageState extends State<GroceriesPage> {
   // }
 
   // small helper widget for offer card
+  bool isLoggedIn = false;
+  @override
+  void initState() {
+    super.initState();
+    _loadLoginStatus();
+  }
+
+  Future<void> _loadLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+    });
+  }
+
   Widget _offerCard(OfferCardModel m) {
     return Container(
       width: 220,
@@ -288,11 +305,11 @@ class _GroceriesPageState extends State<GroceriesPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       children: [
-                           IconButton(
-                                        visualDensity: VisualDensity.compact,
-                                        onPressed: () => Navigator.pop(context),
-                                        icon: const Icon(Icons.arrow_back_ios),
-                                      ),
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.arrow_back_ios),
+                        ),
                         Text(
                           'Shop Groceries',
                           style: TextStyle(
@@ -333,97 +350,108 @@ class _GroceriesPageState extends State<GroceriesPage> {
                 const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
                 // Promo banner
-             SliverToBoxAdapter(
-  child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        height: 120,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-            AppColors.gradientColour,
-            AppColors.primary
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Row(
-                children: [
-                  const SizedBox(width: 18),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Yellow "Trending Offer" tag
-                        Container(
-                          height: 28,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 255, 230, 0),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: const Center(
-                            child: Text(
-                              'Trending Offer',
-                              style: TextStyle(
-                                color: Color(0xFFFF5C00),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 6),
-                        const Text(
-                          'Weekend Mega Sale!',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        const Text(
-                          'Save up to 50% on your\nfavorite grocery brands',
-                          style: TextStyle(
-                            color: Color(0xFFFFF3EA),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Right image
-                  Padding(
-                    padding: const EdgeInsets.only(right: 12),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        AppImage.offers1,
-                        width: 110,
-                        height: 110,
-                        fit: BoxFit.cover,
+                      child: Container(
+                        height: 120,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppColors.gradientColour,
+                              AppColors.primary,
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                        ),
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 18),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        // Yellow "Trending Offer" tag
+                                        Container(
+                                          height: 28,
+                                          width: 160,
+                                          decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                              255,
+                                              255,
+                                              230,
+                                              0,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                          ),
+                                          child: const Center(
+                                            child: Text(
+                                              'Trending Offer',
+                                              style: TextStyle(
+                                                color: Color(0xFFFF5C00),
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(height: 6),
+                                        const Text(
+                                          'Weekend Mega Sale!',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        const Text(
+                                          'Save up to 50% on your\nfavorite grocery brands',
+                                          style: TextStyle(
+                                            color: Color(0xFFFFF3EA),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // Right image
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.asset(
+                                        AppImage.offers1,
+                                        width: 110,
+                                        height: 110,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  ),
-),
+                ),
 
                 const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
@@ -522,7 +550,81 @@ class _GroceriesPageState extends State<GroceriesPage> {
                 right: 24,
                 bottom: 16,
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (!isLoggedIn) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Login Required",
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    "Please login first to continue.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[700],
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 24),
+
+                                  // Custom Button
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            Colors.orange, // button color
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 14,
+                                          horizontal: 24,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        elevation: 2,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return;
+                    }
+                  },
                   child: Container(
                     constraints: const BoxConstraints(minHeight: 52),
                     padding: const EdgeInsets.symmetric(horizontal: 16),

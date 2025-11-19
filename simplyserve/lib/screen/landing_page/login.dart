@@ -57,11 +57,9 @@ class _LoginPageState extends State<LoginPage> {
           await prefs.setString('user_photo', user.user!.photoURL!);
         }
 
-     
         Navigator.pushReplacementNamed(context, Routes.home);
       }
     } catch (e) {
-    
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -97,12 +95,12 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: AppColors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, Routes.loginLanding);
-          },
-          icon: Icon(Icons.arrow_back_ios_new_rounded),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pushReplacementNamed(context, Routes.loginLanding);
+        //   },
+        //   icon: Icon(Icons.arrow_back_ios_new_rounded),
+        // ),
       ),
       body: Center(
         child: SingleChildScrollView(

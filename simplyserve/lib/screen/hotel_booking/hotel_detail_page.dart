@@ -1,8 +1,10 @@
 // lib/pages/hotel_detail_page.dart
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplyserve/const/colour.dart';
 import 'package:simplyserve/custom_widget/custom_cached_image.dart';
+import 'package:simplyserve/screen/landing_page/login.dart';
 
 class HotelDetailPage extends StatefulWidget {
   const HotelDetailPage({Key? key}) : super(key: key);
@@ -189,7 +191,80 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            // Save into parent state
+                            if (!isLoggedIn) {
+                              // user NOT logged in → go to login page
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            "Login Required",
+                                            style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Text(
+                                            "Please login first to continue.",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey[700],
+                                              height: 1.4,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 24),
+
+                                          // Custom Button
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors
+                                                    .orange, // button color
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 14,
+                                                      horizontal: 24,
+                                                    ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                elevation: 2,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                "OK",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+
+                              return; // stop here
+                            }
                             setState(() {
                               _rooms = tempRooms;
                               _guests = tempGuests;
@@ -343,6 +418,21 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
 
   String _roomsGuestsText() {
     return '$_rooms Room${_rooms > 1 ? 's' : ''}, $_guests Guest${_guests > 1 ? 's' : ''}';
+  }
+
+  bool isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLoginStatus();
+  }
+
+  void _loadLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+    });
   }
 
   @override
