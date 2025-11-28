@@ -7,7 +7,7 @@
     <application
         android:label="simplyserve"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data
             android:name="MAPBOX_ACCESS_TOKEN"
            android:value="pk.eyJ1IjoicHNkazA2MTUiLCJhIjoiY20zZWFmdjRpMGJoMDJrcXg1YTg3MmRjaSJ9.RAP8pKqKVTaHQo1GDcd_kw"

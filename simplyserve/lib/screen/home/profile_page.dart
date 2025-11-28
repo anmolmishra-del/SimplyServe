@@ -269,7 +269,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
                     child: GradientButton(
                       text: isLoggedIn ? 'Log Out' : "Login",
-                      onPressed: () => AuthService().logoutUser(context),
+                      onPressed: () => {}
+                      //AuthService().logoutUser(context),
                     ),
                   ),
                   const SizedBox(height: 20),

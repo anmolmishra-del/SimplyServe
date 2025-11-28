@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:simplyserve/screen/landing_page/login/login_page.dart';
+import 'package:simplyserve/screen/landing_page/signup/signup_page.dart';
 import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
 import 'package:simplyserve/screen/landing_page/landing_page.dart';
 import 'package:simplyserve/screen/landing_page/login.dart';

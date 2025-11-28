@@ -7,8 +7,7 @@ import 'package:simplyserve/const/image.dart';
 import 'package:simplyserve/firebase_options.dart';
 
 import 'package:simplyserve/routes.dart';
-import 'package:simplyserve/screen/home/buttom_navigation_bar_page.dart';
-import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
