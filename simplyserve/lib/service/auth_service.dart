@@ -10,7 +10,6 @@
 //     return _auth.currentUser;
 //   }
 
-
 //   Future<void> logoutUser(BuildContext context) async {
 //   final prefs = await SharedPreferences.getInstance();
 
@@ -37,7 +36,6 @@
 //       throw Exception(e.message ?? 'Login failed');
 //     }
 //   }
-
 
 //   Future<void> signUpWithEmailPassword(
 //     BuildContext context,
@@ -74,14 +72,14 @@
 //   }
 // }
 
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'token_manager.dart';
 
 class ApiService {
-  static const String baseUrl = "https://suppositionless-geralyn-jovially.ngrok-free.dev";
+  static const String baseUrl =
+      "https://gressorial-dana-unrepresentatively.ngrok-free.dev";
 
   // GET Request
   static Future<http.Response> get(String endpoint) async {
@@ -97,7 +95,10 @@ class ApiService {
   }
 
   // POST Request
-  static Future<http.Response> post(String endpoint, Map<String, dynamic> body) async {
+  static Future<http.Response> post(
+    String endpoint,
+    Map<String, dynamic> body,
+  ) async {
     String? token = await TokenManager.getToken();
 
     return await http.post(
@@ -111,7 +112,10 @@ class ApiService {
   }
 
   // PUT Request
-  static Future<http.Response> put(String endpoint, Map<String, dynamic> body) async {
+  static Future<http.Response> put(
+    String endpoint,
+    Map<String, dynamic> body,
+  ) async {
     String? token = await TokenManager.getToken();
 
     return await http.put(

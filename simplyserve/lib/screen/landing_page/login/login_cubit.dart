@@ -1,8 +1,9 @@
-
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simplyserve/otp/otp_page.dart';
+import 'package:simplyserve/routes.dart';
 import 'package:simplyserve/service/auth_service.dart';
 import 'login_state.dart';
 
@@ -17,6 +18,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   bool obscure = true;
 
+  bool acceptTerms = false;
   LoginCubit() : super(const LoginState());
 
   void toggleObscure() {
@@ -44,7 +46,7 @@ class LoginCubit extends Cubit<LoginState> {
       // "username": _buildUsername(),
       // "password": passwordCtrl.text,
       // "email": emailCtrl.text.trim(),
-      "phone_number": "+91"+phoneCtrl.text.trim(),
+      "phone_number": "+91" + phoneCtrl.text.trim(),
     };
 
     try {
@@ -53,7 +55,8 @@ class LoginCubit extends Cubit<LoginState> {
       if (res.statusCode == 200 || res.statusCode == 201) {
         final data = jsonDecode(res.body);
 
-        final token = data['token'] ??
+        final token =
+            data['token'] ??
             data['access_token'] ??
             (data['data'] is Map ? data['data']['token'] : null);
 
@@ -61,7 +64,7 @@ class LoginCubit extends Cubit<LoginState> {
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('is_logged_in', true);
-      
+
         if ((data['user'] is Map) && data['user']['name'] != null) {
           await prefs.setString('user_name', data['user']['name'].toString());
         } else if (emailCtrl.text.trim().isNotEmpty) {
@@ -82,21 +85,30 @@ class LoginCubit extends Cubit<LoginState> {
         try {
           final body = jsonDecode(res.body);
           if (body is Map) {
-            if (body.containsKey('message')) message = body['message'].toString();
-            else if (body.containsKey('error')) message = body['error'].toString();
-            else if (body.containsKey('detail')) message = body['detail'].toString();
-            else if (body.containsKey('errors')) message = body['errors'].toString();
-            else message = body.toString();
+            if (body.containsKey('message'))
+              message = body['message'].toString();
+            else if (body.containsKey('error'))
+              message = body['error'].toString();
+            else if (body.containsKey('detail'))
+              message = body['detail'].toString();
+            else if (body.containsKey('errors'))
+              message = body['errors'].toString();
+            else
+              message = body.toString();
           } else {
             message = res.body.toString();
           }
         } catch (_) {
           message = res.body.toString();
         }
-        emit(state.copyWith(status: LoginStatus.failure, errorMessage: message));
+        emit(
+          state.copyWith(status: LoginStatus.failure, errorMessage: message),
+        );
       }
     } catch (e) {
-      emit(state.copyWith(status: LoginStatus.failure, errorMessage: e.toString()));
+      emit(
+        state.copyWith(status: LoginStatus.failure, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -107,4 +119,90 @@ class LoginCubit extends Cubit<LoginState> {
     phoneCtrl.dispose();
     return super.close();
   }
+
+  // Future<void> sendOtpLogin(BuildContext context) async {
+  //   final phone = phoneCtrl.text.trim();
+  //   if (phone.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("Please enter phone number")),
+  //     );
+  //     return;
+  //   }
+
+  //   emit(state.copyWith(status: LoginStatus.loading));
+
+  //   final payload = {"phone_number": "+91$phone"};
+
+  //   try {
+  //     final res = await ApiService.post("/auth/send-otp", payload);
+
+  //     if (res.statusCode == 200 || res.statusCode == 201) {
+  //       emit(state.copyWith(status: LoginStatus.success));
+
+  //       // Navigate to OTP page
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (_) => OtpPage(mobile: phone, cubit: this),
+  //         ),
+  //       );
+  //     } else {
+  //       emit(state.copyWith(status: LoginStatus.failure));
+  //       ScaffoldMessenger.of(
+  //         context,
+  //       ).showSnackBar(SnackBar(content: Text("Failed to send OTP")));
+  //     }
+  //   } catch (e) {
+  //     emit(
+  //       state.copyWith(status: LoginStatus.failure, errorMessage: e.toString()),
+  //     );
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(SnackBar(content: Text(e.toString())));
+  //   }
+  // }
+
+  // void verifyOtpLogin(BuildContext context, String otp) async {
+  //   final phone = phoneCtrl.text.trim();
+  //   if (otp.isEmpty || otp.length < 4) {
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(const SnackBar(content: Text("Please enter valid OTP")));
+  //     return;
+  //   }
+
+  //   emit(state.copyWith(status: LoginStatus.loading));
+
+  //   final payload = {"phone_number": "+91$phone", "otp": otp};
+
+  //   try {
+  //     final res = await ApiService.post("/auth/verify-otp", payload);
+
+  //     if (res.statusCode == 200 || res.statusCode == 201) {
+  //       final data = jsonDecode(res.body);
+  //       final token = data['token'] ?? data['access_token'];
+  //       if (token != null) await TokenManager.saveToken(token.toString());
+
+  //       final prefs = await SharedPreferences.getInstance();
+  //       await prefs.setBool('is_logged_in', true);
+
+  //       // Navigate to Home page
+  //       Navigator.pushReplacementNamed(context, Routes.home);
+
+  //       emit(state.copyWith(status: LoginStatus.success));
+  //     } else {
+  //       emit(state.copyWith(status: LoginStatus.failure));
+  //       ScaffoldMessenger.of(
+  //         context,
+  //       ).showSnackBar(SnackBar(content: Text("Invalid OTP: ${res.body}")));
+  //     }
+  //   } catch (e) {
+  //     emit(
+  //       state.copyWith(status: LoginStatus.failure, errorMessage: e.toString()),
+  //     );
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(SnackBar(content: Text(e.toString())));
+  //   }
+  // }
 }

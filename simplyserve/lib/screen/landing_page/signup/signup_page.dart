@@ -25,14 +25,18 @@ class SignupPage extends StatelessWidget {
       create: (_) => SignupCubit(),
       child: BlocListener<SignupCubit, SignupState>(
         listener: (context, state) {
-          if (state.status == SignupStatus.failure && state.errorMessage != null) {
+          if (state.status == SignupStatus.failure &&
+              state.errorMessage != null) {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
                 title: const Text('Signup failed'),
                 content: Text(state.errorMessage!),
                 actions: [
-                  TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK'))
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('OK'),
+                  ),
                 ],
               ),
             );
@@ -58,7 +62,10 @@ class SignupPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 22),
               child: Container(
                 width: cardWidth,
-                padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 28),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 26,
+                  vertical: 28,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(26),
@@ -107,10 +114,7 @@ class _SignupForm extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: const LinearGradient(
-                    colors: [
-                      AppColors.gradientColour,
-                      AppColors.primary,
-                    ],
+                    colors: [AppColors.gradientColour, AppColors.primary],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -173,7 +177,9 @@ class _SignupForm extends StatelessWidget {
             controller: cubit.nameCtrl,
             hint: 'Full Name',
             leadingIcon: leadingIcon(Icons.person_outline),
-            validator: (v) => (v == null || v.trim().isEmpty) ? 'Please enter full name' : null,
+            validator: (v) => (v == null || v.trim().isEmpty)
+                ? 'Please enter full name'
+                : null,
           ),
           inputGap,
 
@@ -185,7 +191,8 @@ class _SignupForm extends StatelessWidget {
             keyboardType: TextInputType.emailAddress,
             validator: (v) {
               if (v == null || v.trim().isEmpty) return 'Please enter email';
-              if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v)) return 'Enter a valid email';
+              if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v))
+                return 'Enter a valid email';
               return null;
             },
           ),
@@ -197,7 +204,8 @@ class _SignupForm extends StatelessWidget {
             hint: 'Phone Number',
             leadingIcon: leadingIcon(Icons.phone_outlined),
             keyboardType: TextInputType.phone,
-            validator: (v) => (v == null || v.trim().isEmpty) ? 'Please enter phone' : null,
+            validator: (v) =>
+                (v == null || v.trim().isEmpty) ? 'Please enter phone' : null,
           ),
           inputGap,
 
@@ -213,9 +221,14 @@ class _SignupForm extends StatelessWidget {
                 trailing: GestureDetector(
                   onTap: () => cubit.toggleObscurePass(),
                   behavior: HitTestBehavior.translucent,
-                  child: Icon(isObscure ? Icons.visibility_off : Icons.visibility, size: 20),
+                  child: Icon(
+                    isObscure ? Icons.visibility_off : Icons.visibility,
+                    size: 20,
+                  ),
                 ),
-                validator: (v) => (v == null || v.length < 6) ? 'Password must be 6+ chars' : null,
+                validator: (v) => (v == null || v.length < 6)
+                    ? 'Password must be 6+ chars'
+                    : null,
               );
             },
           ),
@@ -233,7 +246,10 @@ class _SignupForm extends StatelessWidget {
                 trailing: GestureDetector(
                   onTap: () => cubit.toggleObscureConfirm(),
                   behavior: HitTestBehavior.translucent,
-                  child: Icon(isObscure ? Icons.visibility_off : Icons.visibility, size: 20),
+                  child: Icon(
+                    isObscure ? Icons.visibility_off : Icons.visibility,
+                    size: 20,
+                  ),
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) return 'Please confirm password';
@@ -260,10 +276,16 @@ class _SignupForm extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
                         border: Border.all(color: const Color(0xFFBDBDBD)),
-                        color: accepted ? const Color(0xFFFFA500) : Colors.white,
+                        color: accepted
+                            ? const Color(0xFFFFA500)
+                            : Colors.white,
                       ),
                       child: accepted
-                          ? const Icon(Icons.check, size: 16, color: Colors.white)
+                          ? const Icon(
+                              Icons.check,
+                              size: 16,
+                              color: Colors.white,
+                            )
                           : null,
                     ),
                   ),
@@ -296,7 +318,11 @@ class _SignupForm extends StatelessWidget {
                         // Check acceptance & validation & password match
                         if (!cubit.acceptTerms) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Please accept Terms & Privacy Policy')),
+                            const SnackBar(
+                              content: Text(
+                                'Please accept Terms & Privacy Policy',
+                              ),
+                            ),
                           );
                           return;
                         }
@@ -326,7 +352,10 @@ class _SignupForm extends StatelessWidget {
               Expanded(child: Divider(color: Color(0xFFECECEC))),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.0),
-                child: Text('Or sign up with', style: TextStyle(color: Colors.black54)),
+                child: Text(
+                  'Or sign up with',
+                  style: TextStyle(color: Colors.black54),
+                ),
               ),
               Expanded(child: Divider(color: Color(0xFFECECEC))),
             ],
@@ -335,11 +364,23 @@ class _SignupForm extends StatelessWidget {
           const SizedBox(height: 14),
 
           // Social buttons
-          _SocialRowButton(icon: 'assets/images/google.png', label: 'Continue with Google', onTap: () {}),
+          _SocialRowButton(
+            icon: 'assets/images/google.png',
+            label: 'Continue with Google',
+            onTap: () {},
+          ),
           const SizedBox(height: 12),
-          _SocialRowButton(icon: 'assets/images/facebook.png', label: 'Continue with Facebook', onTap: () {}),
+          _SocialRowButton(
+            icon: 'assets/images/facebook.png',
+            label: 'Continue with Facebook',
+            onTap: () {},
+          ),
           const SizedBox(height: 12),
-          _SocialRowButton(icon: 'assets/images/apple.png', label: 'Continue with Apple', onTap: () {}),
+          _SocialRowButton(
+            icon: 'assets/images/apple.png',
+            label: 'Continue with Apple',
+            onTap: () {},
+          ),
         ],
       ),
     );
@@ -392,7 +433,10 @@ class _SocialRowButton extends StatelessWidget {
             ),
             const SizedBox(width: 14),
             Expanded(
-              child: Text(label, style: const TextStyle(fontSize: 16, color: Colors.black87)),
+              child: Text(
+                label,
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              ),
             ),
           ],
         ),

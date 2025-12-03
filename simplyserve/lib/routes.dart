@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simplyserve/otp/otp_page.dart';
 import 'package:simplyserve/screen/landing_page/login/login_page.dart';
 import 'package:simplyserve/screen/landing_page/signup/signup_page.dart';
 import 'package:simplyserve/screen/onbording_page/onbording_page.dart';
@@ -14,7 +15,6 @@ import 'package:simplyserve/screen/hotel_booking/hotels_booking_page.dart';
 import 'package:simplyserve/screen/hotel_booking/hotel_detail_page.dart';
 import 'package:simplyserve/screen/food_order/order_detail_page.dart';
 
-
 class Routes {
   Routes._();
 
@@ -22,6 +22,7 @@ class Routes {
   static const String loginLanding = '/login_landing';
   static const String login = '/login';
   static const String signup = '/signup';
+  // static const String otppage = '/otppage';
   static const String home = '/home';
   static const String changeLocation = '/change-location';
   static const String notifications = '/notifications';
@@ -37,6 +38,7 @@ class Routes {
       loginLanding: (c) => const LoginLandingPage(),
       login: (c) => const LoginPage(),
       signup: (c) => const SignupPage(),
+      // otppage: (c) => const OtpPage(),
       home: (c) => const RootScaffold(),
       changeLocation: (c) => const ChangeLocationPage(),
       notifications: (c) => const NotificationsPage(),
