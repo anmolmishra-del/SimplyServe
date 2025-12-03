@@ -46,7 +46,7 @@ class LoginCubit extends Cubit<LoginState> {
       // "username": _buildUsername(),
       // "password": passwordCtrl.text,
       // "email": emailCtrl.text.trim(),
-      "phone_number": "+91" + phoneCtrl.text.trim(),
+      "phone_number":  phoneCtrl.text.trim(),
     };
 
     try {

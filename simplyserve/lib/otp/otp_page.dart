@@ -7,8 +7,6 @@ class OtpPage extends StatelessWidget {
   final SignupCubit cubit;
 
   OtpPage({super.key, required this.mobile, required this.cubit});
-
-  // --- OTP controllers & focus nodes ---
   final List<TextEditingController> controllers = List.generate(
     6,
     (_) => TextEditingController(),
@@ -20,7 +18,7 @@ class OtpPage extends StatelessWidget {
   final ValueNotifier<bool> enableResend = ValueNotifier<bool>(false);
   Timer? timer;
 
-  // --- Start the OTP timer ---
+
   void startTimer() {
     secondsRemaining.value = 30;
     enableResend.value = false;
@@ -36,19 +34,19 @@ class OtpPage extends StatelessWidget {
     });
   }
 
-  // --- Resend OTP ---
+
   void resendOTP(BuildContext context) async {
     startTimer();
     await cubit.sendOtp(context);
   }
 
-  // --- Verify OTP ---
+
   void verifyOTP(BuildContext context) {
     final otp = controllers.map((c) => c.text).join();
     cubit.verifyOtp(context, otp);
   }
 
-  // --- OTP TextField box ---
+
   Widget buildOtpBox(int index, BuildContext context) {
     return SizedBox(
       width: 50,
@@ -84,7 +82,7 @@ class OtpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    startTimer(); // start timer immediately when widget builds
+    startTimer(); 
 
     return Scaffold(
       appBar: AppBar(
@@ -99,7 +97,7 @@ class OtpPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // --- Info text ---
+        
             Text(
               "We have sent a verification code to",
               style: TextStyle(color: Colors.grey.shade700, fontSize: 16),

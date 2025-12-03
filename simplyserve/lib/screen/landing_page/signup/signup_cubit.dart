@@ -108,22 +108,23 @@ class SignupCubit extends Cubit<SignupState> {
 
         // if backend returns token, save it
         print(data);
-        final token =
-            data['token'] ??
-            data['access_token'] ??
-            (data['data'] is Map ? data['data']['token'] : null);
-        if (token != null) {
-          await TokenManager.saveToken(token.toString());
-        }
+        await sendOtp(context);
+        // final token =
+        //     data['token'] ??
+        //     data['access_token'] ??
+        //     (data['data'] is Map ? data['data']['token'] : null);
+        // if (token != null) {
+        //   await TokenManager.saveToken(token.toString());
+        // }
 
         // persist user info in shared preferences
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('is_logged_in', true);
-        await prefs.setString('user_name', nameCtrl.text.trim());
-        await prefs.setString('user_email', emailCtrl.text.trim());
-        await prefs.setString('user_phone', phoneCtrl.text.trim());
+        // final prefs = await SharedPreferences.getInstance();
+        // await prefs.setBool('is_logged_in', true);
+        // await prefs.setString('user_name', nameCtrl.text.trim());
+        // await prefs.setString('user_email', emailCtrl.text.trim());
+        // await prefs.setString('user_phone', phoneCtrl.text.trim());
 
-        emit(state.copyWith(status: SignupStatus.success));
+        // emit(state.copyWith(status: SignupStatus.success));
       } else {
         // try to extract a helpful message from body
         print(res.body);
@@ -177,7 +178,6 @@ class SignupCubit extends Cubit<SignupState> {
     emit(const SignupState());
   }
 
-  // Future<void> sendOtp(BuildContext context) async {}
   Future<void> sendOtp(BuildContext context) async {
     if (!(formKey.currentState?.validate() ?? false)) {
       return;
@@ -198,18 +198,18 @@ class SignupCubit extends Cubit<SignupState> {
 
     // Send this data to backend if needed
     final payload = {
-      "name": nameCtrl.text.trim(),
-      "email": emailCtrl.text.trim(),
-      "phone": phone,
+      // "name": nameCtrl.text.trim(),
+      // "email": emailCtrl.text.trim(),
+      "phone_number": phone,
     };
 
     try {
       final res = await ApiService.post("/auth/send-otp", payload);
 
       if (res.statusCode == 200 || res.statusCode == 201) {
-        emit(state.copyWith(status: SignupStatus.success));
+        //  emit(state.copyWith(status: SignupStatus.success));
 
-        // 🔥 Navigate to OTP Page
+        print(res);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -240,7 +240,6 @@ class SignupCubit extends Cubit<SignupState> {
     }
   }
 
-  // void verifyOtp(BuildContext context, String otp) {}
   void verifyOtp(BuildContext context, String otp) async {
     final phone = phoneCtrl.text.trim();
 
@@ -253,7 +252,7 @@ class SignupCubit extends Cubit<SignupState> {
 
     emit(state.copyWith(status: SignupStatus.loading));
 
-    final payload = {"phone": phone, "otp": otp};
+    final payload = {"phone_number": phone, "otp": otp};
 
     try {
       final res = await ApiService.post("/auth/verify-otp", payload);
@@ -264,7 +263,24 @@ class SignupCubit extends Cubit<SignupState> {
           const SnackBar(content: Text("OTP verified successfully")),
         );
 
-        // Now perform actual signup
+     final data = jsonDecode(res.body);
+            final token =
+            data['token'] ??
+            data['access_token'] ??
+            (data['data'] is Map ? data['data']['token'] : null);
+        if (token != null) {
+          await TokenManager.saveToken(token.toString());
+        }
+
+      
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('is_logged_in', true);
+        await prefs.setString('user_name', nameCtrl.text.trim());
+        await prefs.setString('user_email', emailCtrl.text.trim());
+        await prefs.setString('user_phone', phoneCtrl.text.trim());
+
+        emit(state.copyWith(status: SignupStatus.success));
+    
         await signUp(context);
       } else {
         // OTP incorrect
