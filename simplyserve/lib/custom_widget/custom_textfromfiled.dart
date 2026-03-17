@@ -1,14 +1,12 @@
-
-
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String hint;
-  final Widget? prefixIcon;   // older name used in some files
-  final Widget? leadingIcon;  // used in signup page
-  final Widget? suffixIcon;   // older name
-  final Widget? trailing;     // used in signup page
+  final Widget? prefixIcon; // older name used in some files
+  final Widget? leadingIcon; // used in signup page
+  final Widget? suffixIcon; // older name
+  final Widget? trailing; // used in signup page
   final bool obscureText;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
@@ -52,15 +50,24 @@ class CustomTextField extends StatelessWidget {
               ? null
               : Padding(
                   padding: const EdgeInsets.only(left: 14.0, right: 8.0),
-                  child: IconTheme(data: const IconThemeData(size: 22), child: _leading),
+                  child: IconTheme(
+                    data: const IconThemeData(size: 22),
+                    child: _leading,
+                  ),
                 ),
           suffixIcon: _trailing == null
               ? null
               : Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: IconTheme(data: const IconThemeData(size: 20), child: _trailing),
+                  child: IconTheme(
+                    data: const IconThemeData(size: 20),
+                    child: _trailing,
+                  ),
                 ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 18,
+            horizontal: 14,
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: const BorderSide(color: Color(0xFFE5E7EB)),

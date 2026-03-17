@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simplyserve/custom_widget/endpoint.dart';
 import 'package:simplyserve/otp/otp_page.dart';
 import 'package:simplyserve/routes.dart';
 import 'package:simplyserve/service/auth_service.dart';
@@ -46,11 +47,12 @@ class LoginCubit extends Cubit<LoginState> {
       // "username": _buildUsername(),
       // "password": passwordCtrl.text,
       // "email": emailCtrl.text.trim(),
-      "phone_number":  phoneCtrl.text.trim(),
+      "phone_number": phoneCtrl.text.trim(),
     };
 
     try {
-      final res = await ApiService.post("/auth/send-otp", payload);
+      final res = await ApiService.post(Endpoint.sendOtp, payload);
+      // final res = await ApiService.post("/auth/send-otp", payload);
 
       if (res.statusCode == 200 || res.statusCode == 201) {
         final data = jsonDecode(res.body);

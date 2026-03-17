@@ -8,7 +8,6 @@ import 'package:simplyserve/firebase_options.dart';
 
 import 'package:simplyserve/routes.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -76,8 +75,9 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Image.asset(
           AppImage.logo,
-          width: 200,
-          height: 200,
+
+          // width: 200,
+          // height: 200,
           fit: BoxFit.contain,
         ),
       ),

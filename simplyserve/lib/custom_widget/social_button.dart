@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class _SocialButton extends StatelessWidget {
@@ -41,18 +40,10 @@ class _SocialButton extends StatelessWidget {
           ],
         ),
       ),
+      w,
     );
   }
 }
-
-
-
-
-
-
-
-
-
 
 class SocialCircle extends StatelessWidget {
   final String iconAsset;

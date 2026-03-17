@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:simplyserve/const/colour.dart';
 
-
 class QuickAction extends StatelessWidget {
   final String label;
   final IconData icon;
   final void Function() onTap;
-  
 
   const QuickAction({
     Key? key,
@@ -18,8 +16,7 @@ class QuickAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-     
-   decoration: BoxDecoration(
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFFECECEC)),
       ),
